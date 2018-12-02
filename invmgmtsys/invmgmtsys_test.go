@@ -15,6 +15,12 @@ func TestChkSum(t *testing.T) {
 	t.Logf("Check sum was: %d", res)
 }
 
+func TestFindCmnLetters(t *testing.T) {
+	strslice := read()
+	res := FindCmnLetters(strslice)
+	t.Logf("Common letters was: %s", res)
+}
+
 func read() []string {
 	f, _ := os.Open("./data")
 	defer f.Close()
