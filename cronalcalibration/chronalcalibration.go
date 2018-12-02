@@ -26,9 +26,9 @@ func FindDupFreq(snums []string) int {
 		if findIx(current, freqs) {
 			return current
 		}
-		ix = ix + 1
+		ix++
 		if ix == len(snums) {
-			ix = 0
+			ix = 0 // index has wrapped around
 		}
 		freqs = append(freqs, current)
 	}

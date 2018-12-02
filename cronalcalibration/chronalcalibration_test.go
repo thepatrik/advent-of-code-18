@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 	"testing"
@@ -13,13 +12,13 @@ import (
 func TestSumFreq(t *testing.T) {
 	strslice := read()
 	res := SumFreq(strslice, 0)
-	log.Printf("Sum of frequencies are: %d", res)
+	t.Logf("Sum of frequencies are: %d", res)
 }
 
 func TestFindDupFreq(t *testing.T) {
 	strslice := read()
 	res := FindDupFreq(strslice)
-	log.Printf("First duplicate frequency is: %d", res)
+	t.Logf("First duplicate frequency is: %d", res)
 }
 
 func read() []string {
