@@ -5,29 +5,19 @@ import "strconv"
 // FindDupFreq : Find the first duplicate frequence
 func FindDupFreq(snums []string) int {
 	current := 0
-	freqs := make([]int, 0)
-	freqs = append(freqs, current)
-	ix := 0
+	freqs := make(map[int]bool)
+	freqs[current] = true
+	i := 0
 	for {
-		s := snums[ix]
-		v, _ := strconv.Atoi(s)
+		v, _ := strconv.Atoi(snums[i])
 		current = current + v
-		if findIx(current, freqs) {
+		if _, ok := freqs[current]; ok == true {
 			return current
 		}
-		ix++
-		if ix == len(snums) {
-			ix = 0 // index has wrapped around
-		}
-		freqs = append(freqs, current)
-	}
-}
 
-func findIx(v int, ixs []int) bool {
-	for _, ix := range ixs {
-		if v == ix {
-			return true
+		if i++; i == len(snums) {
+			i = 0 // index has wrapped around
 		}
+		freqs[current] = true
 	}
-	return false
 }

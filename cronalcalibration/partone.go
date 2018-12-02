@@ -1,8 +1,6 @@
 package cronalcalibration
 
-import (
-	"strconv"
-)
+import "strconv"
 
 // SumFreq : Get the sum of all frequencies
 func SumFreq(s []string, i int) int {
