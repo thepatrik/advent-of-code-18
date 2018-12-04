@@ -9,4 +9,7 @@ cronalcalibration:
 invmgmtsys:
 	go test -v ./invmgmtsys
 
-.PHONY: test cronalcalibration invmgmtsys
+nomatterhowyousliceit:
+	go test -v ./nomatterhowyousliceit
+
+.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit
