@@ -12,4 +12,7 @@ invmgmtsys:
 nomatterhowyousliceit:
 	go test -v ./nomatterhowyousliceit
 
-.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit
+marblemania:
+	go test -v ./marblemania
+
+.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania
