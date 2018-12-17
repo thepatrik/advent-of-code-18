@@ -15,4 +15,7 @@ nomatterhowyousliceit:
 marblemania:
 	go test -v ./marblemania
 
-.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania
+chronalclassification:
+	go test -v ./chronalclassification
+
+.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification
