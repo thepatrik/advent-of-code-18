@@ -21,4 +21,7 @@ chronalclassification:
 reposerecord:
 	go test -v ./reposerecord
 
-.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord
+alchemicalreduction:
+	go test -v ./alchemicalreduction
+
+.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction
