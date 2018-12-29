@@ -18,4 +18,7 @@ marblemania:
 chronalclassification:
 	go test -v ./chronalclassification
 
-.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification
+reposerecord:
+	go test -v ./reposerecord
+
+.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord
