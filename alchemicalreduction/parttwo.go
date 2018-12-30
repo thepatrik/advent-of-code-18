@@ -1,23 +1,42 @@
 package alchemicalreduction
 
-import "unicode"
+import (
+	"sync"
+	"unicode"
+)
+
+const (
+	alpha = "abcdefghijklmnopqrstuvxyz"
+)
 
 // FindShortestPolymerLen finds the shortest polymers
 // length.
 func FindShortestPolymerLen(s string) int {
 	m := make(map[rune]int)
 	runes := []rune(s)
-	for _, r := range "abcdefghijklmnopqrstuvxyz" {
-		res := washrune(runes, r)
-		changes := 0
-		for {
-			res, changes = wash(res)
-			if changes == 0 {
-				m[r] = len(res)
-				break
+
+	var wg sync.WaitGroup
+	wg.Add(len(alpha))
+
+	for _, r := range alpha {
+		// Run each rune in a separate goroutine
+		go func(alpha rune) {
+			defer wg.Done()
+
+			res := washrune(runes, alpha)
+			changes := 0
+			for {
+				res, changes = wash(res)
+				if changes == 0 {
+					m[alpha] = len(res)
+					break
+				}
 			}
-		}
+		}(r)
 	}
+
+	// Wait for all goroutines to finish
+	wg.Wait()
 
 	// Find the polymer with the lowest score
 	_, lowest := func() (string, int) {
