@@ -1,7 +1,13 @@
-.DEFAULT_GOAL:= test
+.DEFAULT_GOAL:= all
 
-test:
+all:
 	go test -v ./...
+
+alchemicalreduction:
+	go test -v ./alchemicalreduction
+
+chronalclassification:
+	go test -v ./chronalclassification
 
 cronalcalibration:
 	go test -v ./cronalcalibration
@@ -9,19 +15,16 @@ cronalcalibration:
 invmgmtsys:
 	go test -v ./invmgmtsys
 
-nomatterhowyousliceit:
-	go test -v ./nomatterhowyousliceit
-
 marblemania:
 	go test -v ./marblemania
 
-chronalclassification:
-	go test -v ./chronalclassification
+nomatterhowyousliceit:
+	go test -v ./nomatterhowyousliceit
+
+memorymaneuver:
+	go test -v ./memorymaneuver
 
 reposerecord:
 	go test -v ./reposerecord
 
-alchemicalreduction:
-	go test -v ./alchemicalreduction
-
-.PHONY: test cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction
+.PHONY: all cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction memorymaneuver
