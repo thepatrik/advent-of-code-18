@@ -24,7 +24,10 @@ nomatterhowyousliceit:
 memorymaneuver:
 	go test -v ./memorymaneuver
 
+starsalign:
+	go test -v ./starsalign
+
 reposerecord:
 	go test -v ./reposerecord
 
-.PHONY: all cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction memorymaneuver
+.PHONY: all cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction memorymaneuver starsalign
