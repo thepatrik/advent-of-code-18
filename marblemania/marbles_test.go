@@ -4,22 +4,22 @@ import (
 	"testing"
 )
 
-func TestWinningScoreSmall(t *testing.T) {
-	players := 10
-	totalPlays := 1618
-	score := WinningScore(players, totalPlays)
-	t.Logf("Score was: %d", score)
-	if score != 8317 {
-		t.Fail()
-	}
-}
-
-func TestWinningScore(t *testing.T) {
+func TestWinningScorePart1(t *testing.T) {
 	players := 411
 	totalPlays := 72059
 	score := WinningScore(players, totalPlays)
 	t.Logf("Score was: %d", score)
 	if score != 429943 {
+		t.Fail()
+	}
+}
+
+func TestWinningScorePart2(t *testing.T) {
+	players := 411
+	totalPlays := 72059 * 100
+	score := WinningScore(players, totalPlays)
+	t.Logf("Score was: %d", score)
+	if score != 3615691746 {
 		t.Fail()
 	}
 }
