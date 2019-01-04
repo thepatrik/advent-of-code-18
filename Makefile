@@ -1,7 +1,6 @@
 .DEFAULT_GOAL:= all
 
-all:
-	go test -v ./...
+all: cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction memorymaneuver starsalign
 
 alchemicalreduction:
 	go test -v ./alchemicalreduction

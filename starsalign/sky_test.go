@@ -3,29 +3,28 @@ package starsalign
 import (
 	"advent-of-code-18/testutils"
 	"fmt"
-	"log"
 	"testing"
 )
 
 func TestFindMessage(t *testing.T) {
 	strslice := testutils.ReadFile("./data")
-	points := points(strslice)
-	sky := newSky(points)
-	message := sky.FindMessage()
-	log.Print(message)
+	stars := stars(strslice)
+	sky := NewSky(stars)
+	sky.Search()
+	t.Log(sky)
 	t.Logf("Waiting time would have been %d secs.", sky.iteration)
 	if sky.iteration != 10027 {
 		t.Fail()
 	}
 }
 
-func points(strslice []string) []Point {
-	points := make([]Point, 0)
+func stars(strslice []string) []Star {
+	stars := make([]Star, 0)
 	for _, s := range strslice {
-		var point Point
+		var star Star
 		_, _ = fmt.Sscanf(s, "position=<%d, %d> velocity=<%d, %d>",
-			&point.posx, &point.posy, &point.velx, &point.vely)
-		points = append(points, point)
+			&star.position.x, &star.position.y, &star.velocity.x, &star.velocity.y)
+		stars = append(stars, star)
 	}
-	return points
+	return stars
 }

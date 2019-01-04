@@ -1,22 +1,33 @@
 package starsalign
 
 import (
-	"math"
 	"strings"
 )
 
 // Sky type
 type Sky struct {
-	points    []Point
+	stars     []Star
 	iteration int
 }
 
-// Point type
-type Point struct {
-	posx int
-	posy int
-	velx int
-	vely int
+// Star type
+type Star struct {
+	position Position
+	velocity Velocity
+}
+
+// Position (x, y). X represents left (negative) or
+// right (positive), while Y represents up (negative)
+// or down (positive).
+type Position struct {
+	x int
+	y int
+}
+
+// Velocity (x, y) per second.
+type Velocity struct {
+	x int
+	y int
 }
 
 // BoundingBox type
@@ -27,73 +38,90 @@ type BoundingBox struct {
 	bottom int
 }
 
-// newSky constructs a Sky
-func newSky(points []Point) Sky {
-	return Sky{points: points}
+// NewSky constructs a brand new Sky.
+func NewSky(stars []Star) Sky {
+	return Sky{stars: stars}
 }
 
-func (sky *Sky) fwd() {
-	for i, point := range sky.points {
-		sky.points[i].posx += point.velx
-		sky.points[i].posy += point.vely
+// Tick iterates the clock one second, and moves each
+// star's position according to the velocity.
+func (sky *Sky) Tick() {
+	for i := range sky.stars {
+		sky.stars[i].position.x += sky.stars[i].velocity.x
+		sky.stars[i].position.y += sky.stars[i].velocity.y
 	}
 	sky.iteration++
 }
 
-func (sky *Sky) rwd() {
-	for i, point := range sky.points {
-		sky.points[i].posx -= point.velx
-		sky.points[i].posy -= point.vely
+// Rewind iterates the clock one second backwards, and
+// moves each star's position according to the velocity.
+func (sky *Sky) Rewind() {
+	for i := range sky.stars {
+		sky.stars[i].position.x -= sky.stars[i].velocity.x
+		sky.stars[i].position.y -= sky.stars[i].velocity.y
 	}
 	sky.iteration--
 }
 
-func (sky *Sky) dimensions() (int, int) {
-	bbox := sky.bounds()
+// Bounds returns a bounding box around the current
+// alignment of the stars.
+func (sky Sky) Bounds() BoundingBox {
+	bbox := BoundingBox{top: 1<<31 - 1, left: 1<<31 - 1, right: -1 << 31, bottom: -1 << 31}
+
+	for _, star := range sky.stars {
+		if star.position.x > bbox.right {
+			bbox.right = star.position.x
+		} else if star.position.x < bbox.left {
+			bbox.left = star.position.x
+		}
+		if star.position.y < bbox.top {
+			bbox.top = star.position.y
+		} else if star.position.y > bbox.bottom {
+			bbox.bottom = star.position.y
+		}
+	}
+	return bbox
+}
+
+// Dimensions returns the dimensions (width*height)
+// based on the bounding box.
+func (sky Sky) Dimensions() (int, int) {
+	bbox := sky.Bounds()
 	w := bbox.right - bbox.left + 1
 	h := bbox.bottom - bbox.top + 1
 	return w, h
 }
 
-func (sky *Sky) size() int64 {
-	w, h := sky.dimensions()
+// Area returns the size from the dimensions.
+func (sky Sky) Area() int64 {
+	w, h := sky.Dimensions()
 	return int64(w * h)
 }
 
-func (sky *Sky) bounds() BoundingBox {
-	box := BoundingBox{top: math.MaxInt32, left: math.MaxInt32, right: math.MinInt32, bottom: math.MinInt32}
-	for _, point := range sky.points {
-		if point.posx > box.right {
-			box.right = point.posx
-		} else if point.posx < box.left {
-			box.left = point.posx
-		}
-
-		if point.posy < box.top {
-			box.top = point.posy
-		} else if point.posy > box.bottom {
-			box.bottom = point.posy
-		}
-	}
-	return box
-}
-
-func (sky *Sky) plot() string {
-	w, h := sky.dimensions()
+// Matrix turns the sky into a plottable two-dimensional
+// slice.
+func (sky Sky) Matrix() [][]bool {
+	w, h := sky.Dimensions()
 	matrix := make([][]bool, h)
 	for i := 0; i < h; i++ {
 		matrix[i] = make([]bool, w)
 	}
 
-	bbox := sky.bounds()
-	for _, point := range sky.points {
-		x := point.posx - bbox.left
-		y := point.posy - bbox.top
+	bbox := sky.Bounds()
+	for _, star := range sky.stars {
+		x := star.position.x - bbox.left
+		y := star.position.y - bbox.top
 		matrix[y][x] = true
 	}
+	return matrix
+}
 
+// String returns a string based on a matrix of the
+// star positions.
+func (sky Sky) String() string {
 	var builder strings.Builder
 	builder.WriteRune('\n')
+	matrix := sky.Matrix()
 	for h := 0; h < len(matrix); h++ {
 		for w := 0; w < len(matrix[h]); w++ {
 			if matrix[h][w] {
@@ -107,21 +135,16 @@ func (sky *Sky) plot() string {
 	return builder.String()
 }
 
-func (sky *Sky) traverse() {
-	size := sky.size()
-	sky.fwd()
+// Search looks for a message in the sky. Iterates until the
+// message is found, or we run out of memory :-)
+func (sky *Sky) Search() {
+	area := sky.Area()
+	sky.Tick()
 
-	// When the size starts to increase, we have hit bottom.
-	if sky.size() > size {
-		// Rewind and unfold
-		sky.rwd()
+	if sky.Area() > area {
+		// When the area starts to increase, we have hit bottom.
+		sky.Rewind()
 		return
 	}
-	sky.traverse()
-}
-
-// FindMessage looks for a message in the sky
-func (sky *Sky) FindMessage() string {
-	sky.traverse()
-	return sky.plot()
+	sky.Search()
 }
