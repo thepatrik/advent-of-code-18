@@ -1,34 +1,31 @@
 package sumofparts
 
 // Order returns the execution order of steps
-func Order(steps []*Step) string {
-	candidates := NewSteps(steps)
-	for _, step := range steps {
-		// Adds (root) steps which do not need any pre steps
-		if len(step.preSteps) == 0 {
-			candidates.Add(step)
+func Order(allsteps []*Step) string {
+	steps := NewSteps()
+	for _, step := range allsteps {
+		// Add root steps (ie steps that do not need any pre steps)
+		if step.IsRoot() {
+			steps.Add(step)
 		}
 	}
-	root, _ := candidates.Next()
-	return traverse(root, candidates)
+	return iterate(steps)
 }
 
-func traverse(current *Step, candidates Steps) string {
-	current.done = true
-	candidates.Remove(current)
+func iterate(steps Steps) string {
+	step, err := steps.Next()
+	if err != nil {
+		return "" // No more steps found
+	}
 
-	for _, step := range current.postSteps {
+	step.Done()
+	steps.Remove(step)
+
+	for _, post := range step.postSteps {
 		// Add steps that are ready to be executed
-		if step.Ready() {
-			candidates.Add(step)
+		if post.IsReady() {
+			steps.Add(post)
 		}
 	}
-
-	next, err := candidates.Next()
-	if err != nil {
-		// We're out of candidate steps. Unfold recursion
-		// by returning the key of the current step
-		return current.key
-	}
-	return current.key + traverse(next, candidates)
+	return step.key + iterate(steps)
 }
