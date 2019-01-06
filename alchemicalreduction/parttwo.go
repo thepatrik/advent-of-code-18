@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	alpha = "abcdefghijklmnopqrstuvxyz"
+	alpha = "abcdefghijklmnopqrstuvwxyz"
 )
 
 // FindShortestPolymerLen finds the shortest polymers
