@@ -1,4 +1,4 @@
-package cronalcalibration
+package chronalcalibration
 
 import "strconv"
 
