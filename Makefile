@@ -1,12 +1,15 @@
 .DEFAULT_GOAL:= all
 
-all: cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction memorymaneuver starsalign sumofparts
+all: alchemicalreduction chronalclassification chronalcoordinates cronalcalibration invmgmtsys marblemania memorymaneuver nomatterhowyousliceit reposerecord starsalign sumofparts
 
 alchemicalreduction:
 	go test -v ./alchemicalreduction
 
 chronalclassification:
 	go test -v ./chronalclassification
+
+chronalcoordinates:
+	go test -v ./chronalcoordinates
 
 cronalcalibration:
 	go test -v ./cronalcalibration
@@ -32,4 +35,4 @@ starsalign:
 sumofparts:
 	go test -v ./sumofparts
 
-.PHONY: all cronalcalibration invmgmtsys nomatterhowyousliceit marblemania chronalclassification reposerecord alchemicalreduction memorymaneuver starsalign sumofparts
+.PHONY: all alchemicalreduction chronalclassification chronalcoordinates cronalcalibration invmgmtsys marblemania memorymaneuver nomatterhowyousliceit reposerecord starsalign sumofparts
