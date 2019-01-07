@@ -7,6 +7,9 @@ import (
 
 func TestChkSum(t *testing.T) {
 	strslice := testutils.ReadFile("./data")
-	res := ChkSum(strslice)
-	t.Logf("Check sum was: %d", res)
+	chkSum := ChkSum(strslice)
+	t.Logf("Check sum was: %d", chkSum)
+	if chkSum != 6000 {
+		t.Fail()
+	}
 }

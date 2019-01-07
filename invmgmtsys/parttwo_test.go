@@ -7,6 +7,9 @@ import (
 
 func TestFindCmnLetters(t *testing.T) {
 	strslice := testutils.ReadFile("./data")
-	res := FindCmnLetters(strslice)
-	t.Logf("Common letters was: %s", res)
+	letters := FindCmnLetters(strslice)
+	t.Logf("Common letters was: %s", letters)
+	if letters != "pbykrmjmizwhxlqnasfgtycdv" {
+		t.Fail()
+	}
 }
