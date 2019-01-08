@@ -1,6 +1,6 @@
 .DEFAULT_GOAL:= all
 
-all: alchemicalreduction chronalcalibration chronalclassification chronalcoordinates invmgmtsys marblemania memorymaneuver nomatterhowyousliceit reposerecord starsalign sumofparts
+all: alchemicalreduction chronalcalibration chronalclassification chronalcoordinates invmgmtsys marblemania memorymaneuver nomatterhowyousliceit reposerecord starsalign subterraneansustainability sumofparts
 
 alchemicalreduction:
 	go test -v ./alchemicalreduction
@@ -32,7 +32,13 @@ reposerecord:
 starsalign:
 	go test -v ./starsalign
 
+subterraneansustainability:
+	go test -v -timeout 10h ./subterraneansustainability
+
 sumofparts:
 	go test -v ./sumofparts
 
-.PHONY: all alchemicalreduction chronalcalibration chronalclassification chronalcoordinates invmgmtsys marblemania memorymaneuver nomatterhowyousliceit reposerecord starsalign sumofparts
+test:
+	go test ./...
+
+.PHONY: all alchemicalreduction chronalcalibration chronalclassification chronalcoordinates invmgmtsys marblemania memorymaneuver nomatterhowyousliceit reposerecord starsalign subterraneansustainability sumofparts test
