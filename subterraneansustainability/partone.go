@@ -1,41 +1,40 @@
 package subterraneansustainability
 
-import (
-	"sync"
-)
+import "sync"
 
 // PotSum calculates the sum of all pots that contain a plant
 func PotSum(pots *Pots, patterns []Pattern, generations int) int {
-	return growGeneration(pots, &patterns, 0, generations)
+	return growGeneration(pots, patterns, 0, generations)
 }
 
-func growGeneration(pots *Pots, patterns *[]Pattern, generation int, maxgen int) int {
+func growGeneration(pots *Pots, patterns []Pattern, generation int, maxgen int) int {
 	if generation == maxgen {
 		return pots.Sum()
 	}
 
-	wg, mutex := sync.WaitGroup{}, &sync.Mutex{}
-	wg.Add(len(*patterns))
+	noOfPots, offset := pots.Len()
+	noOfPatterns := len(patterns)
+	wg, mutex := sync.WaitGroup{}, sync.Mutex{}
+	wg.Add(noOfPatterns)
+	nxtpots := NewPots()
 
-	nxtpots := NewPots() // Pots for the next generation
-
-	for _, pattern := range *patterns {
-		offset := pots.Offset()
-		go func(pattern Pattern) {
+	for p := 0; p < noOfPatterns; p++ {
+		go func(pattern *Pattern) {
 			defer wg.Done()
-
 			// Patterns can match pots two to the left of the first growing plant
 			// and two to the right of the last plant
-			for i := -2; i < pots.Len()+2; i++ {
+			for i := -2; i < noOfPots+2; i++ {
 				pot := i + offset
 				// No need to check patterns when N is false
 				if pattern.N && pots.Compare(pot, pattern) {
-					mutex.Lock()
-					nxtpots.Grow(pot)
-					mutex.Unlock()
+					func() {
+						mutex.Lock()
+						defer mutex.Unlock()
+						nxtpots.Grow(pot)
+					}()
 				}
 			}
-		}(pattern)
+		}(&patterns[p])
 	}
 	wg.Wait() // Wait for patterns to finish before starting next gen
 	return growGeneration(nxtpots, patterns, generation+1, maxgen)

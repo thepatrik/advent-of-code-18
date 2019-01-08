@@ -18,6 +18,15 @@ func TestPotSumSmall(t *testing.T) {
 	}
 }
 
+func BenchmarkPotSum(b *testing.B) {
+	s := testutils.ReadFile("./data_initial")[0]
+	pots := pots(s)
+	strslice := testutils.ReadFile("./data")
+	patterns := patterns(strslice)
+	sum := PotSum(pots, patterns, 100000)
+	b.Logf("Sum of pots was %d", sum)
+}
+
 func TestPotSum(t *testing.T) {
 	s := testutils.ReadFile("./data_initial")[0]
 	pots := pots(s)

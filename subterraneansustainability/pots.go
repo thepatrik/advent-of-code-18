@@ -1,6 +1,8 @@
 package subterraneansustainability
 
-import "sort"
+import (
+	"sort"
+)
 
 // Pots type
 type Pots struct {
@@ -27,17 +29,15 @@ func (p *Pots) Keys() *[]int {
 	return &keys
 }
 
-// Len returns the length
-func (p *Pots) Len() int {
+// Offset returns the indice of the first growing plant
+func (p *Pots) Offset() int {
+	return offset(*p.Keys())
+}
+
+// Len returns the length and offset
+func (p *Pots) Len() (int, int) {
 	keys := *p.Keys()
-	switch len(keys) {
-	case 0:
-		return 0
-	case 1:
-		return 1
-	default:
-		return keys[len(keys)-1] - keys[0]
-	}
+	return length(keys), offset(keys)
 }
 
 // Sum calculates the sum of all pots with a plant
@@ -47,15 +47,6 @@ func (p *Pots) Sum() int {
 		sum += k
 	}
 	return sum
-}
-
-// Offset returns the indice of the first growing plant
-func (p *Pots) Offset() int {
-	keys := *p.Keys()
-	if len(keys) == 0 {
-		return 0
-	}
-	return keys[0]
 }
 
 // Slice turns pots to slice of bool
@@ -80,7 +71,7 @@ func (p *Pots) Slice() []bool {
 }
 
 // Compare if a pattern checks out
-func (p *Pots) Compare(pot int, pattern Pattern) bool {
+func (p *Pots) Compare(pot int, pattern *Pattern) bool {
 	if p.m[pot-2] != pattern.L2 {
 		return false
 	}
@@ -106,4 +97,22 @@ func (p *Pots) String() string {
 		s += boolToString(v)
 	}
 	return s
+}
+
+func length(keys []int) int {
+	switch len(keys) {
+	case 0:
+		return 0
+	case 1:
+		return 1
+	default:
+		return keys[len(keys)-1] - keys[0]
+	}
+}
+
+func offset(keys []int) int {
+	if len(keys) == 0 {
+		return 0
+	}
+	return keys[0]
 }
