@@ -1,17 +1,16 @@
 package subterraneansustainability
 
-import "sync"
+import (
+	"sync"
+)
 
-// PotSum calculates the sum of all pots that contain a plant
-func PotSum(pots *Pots, patterns []Pattern, generations int) int {
+// PotSum calculates the sum of all pots that contain a plant along with the
+// delta for the last generation (used in part two).
+func PotSum(pots *Pots, patterns []Pattern, generations int) (int, int) {
 	return growGeneration(pots, patterns, 0, generations)
 }
 
-func growGeneration(pots *Pots, patterns []Pattern, generation int, maxgen int) int {
-	if generation == maxgen {
-		return pots.Sum()
-	}
-
+func growGeneration(pots *Pots, patterns []Pattern, generation int, maxgen int) (int, int) {
 	noOfPots, offset := pots.Len()
 	noOfPatterns := len(patterns)
 	wg, mutex := sync.WaitGroup{}, sync.Mutex{}
@@ -37,5 +36,11 @@ func growGeneration(pots *Pots, patterns []Pattern, generation int, maxgen int) 
 		}(&patterns[p])
 	}
 	wg.Wait() // Wait for patterns to finish before starting next gen
-	return growGeneration(nxtpots, patterns, generation+1, maxgen)
+
+	generation++
+	if generation == maxgen {
+		// Returns the calculated sum along with the delta for the last gen
+		return nxtpots.Sum(), nxtpots.Sum() - pots.Sum()
+	}
+	return growGeneration(nxtpots, patterns, generation, maxgen)
 }

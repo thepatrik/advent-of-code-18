@@ -11,7 +11,7 @@ func TestPotSumSmall(t *testing.T) {
 	pots := pots(s)
 	strslice := testutils.ReadFile("./data_s")
 	patterns := patterns(strslice)
-	sum := PotSum(pots, patterns, 20)
+	sum, _ := PotSum(pots, patterns, 20)
 	t.Logf("Sum of pots was %d", sum)
 	if sum != 325 {
 		t.Fail()
@@ -23,7 +23,7 @@ func BenchmarkPotSum(b *testing.B) {
 	pots := pots(s)
 	strslice := testutils.ReadFile("./data")
 	patterns := patterns(strslice)
-	sum := PotSum(pots, patterns, 100000)
+	sum, _ := PotSum(pots, patterns, 100000)
 	b.Logf("Sum of pots was %d", sum)
 }
 
@@ -32,9 +32,25 @@ func TestPotSum(t *testing.T) {
 	pots := pots(s)
 	strslice := testutils.ReadFile("./data")
 	patterns := patterns(strslice)
-	sum := PotSum(pots, patterns, 20)
+	sum, _ := PotSum(pots, patterns, 20)
 	t.Logf("Sum of pots was %d", sum)
 	if sum != 1672 {
+		t.Fail()
+	}
+}
+
+func TestPotSum50Billion(t *testing.T) {
+	s := testutils.ReadFile("./data_initial")[0]
+	pots := pots(s)
+	strslice := testutils.ReadFile("./data")
+	patterns := patterns(strslice)
+	sum, delta := PotSum(pots, patterns, 1000)
+	// After x generations the delta between each generation stabilizes
+	// (on my data it is 33). Take the sum of 1000 generations and add
+	// the sum of deltas for the rest (49999999000).
+	fiftybillion := sum + (50000000000-1000)*delta
+	t.Logf("After 50 billion generations the sum is %d", fiftybillion)
+	if fiftybillion != 1650000000055 {
 		t.Fail()
 	}
 }
