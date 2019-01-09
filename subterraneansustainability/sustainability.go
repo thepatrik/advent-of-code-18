@@ -20,7 +20,7 @@ func growGeneration(pots *Pots, patterns []Pattern, generation int, maxgen int) 
 	for p := 0; p < noOfPatterns; p++ {
 		go func(pattern *Pattern) {
 			defer wg.Done()
-			// Patterns can match pots two to the left of the first growing plant
+			// Patterns can match two pots to the left of the first growing plant
 			// and two to the right of the last plant
 			for i := -2; i < noOfPots+2; i++ {
 				pot := i + offset
@@ -29,18 +29,19 @@ func growGeneration(pots *Pots, patterns []Pattern, generation int, maxgen int) 
 					func() {
 						mutex.Lock()
 						defer mutex.Unlock()
+						// Grow plant for next generation
 						nxtpots.Grow(pot)
 					}()
 				}
 			}
 		}(&patterns[p])
 	}
-	wg.Wait() // Wait for patterns to finish before starting next gen
+	wg.Wait() // Wait for patterns to finish
 
-	generation++
-	if generation == maxgen {
+	if generation++; generation == maxgen {
 		// Returns the calculated sum along with the delta for the last gen
 		return nxtpots.Sum(), nxtpots.Sum() - pots.Sum()
 	}
+	// Iterate until we hit desired generation
 	return growGeneration(nxtpots, patterns, generation, maxgen)
 }
