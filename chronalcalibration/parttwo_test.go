@@ -1,8 +1,9 @@
 package chronalcalibration
 
 import (
-	"advent-of-code-18/testutils"
 	"testing"
+
+	"github.com/thepatrik/advent-of-code-18/testutils"
 )
 
 func TestFindDupFreq(t *testing.T) {

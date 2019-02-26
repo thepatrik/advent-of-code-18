@@ -1,11 +1,12 @@
 package chronalclassification
 
 import (
-	"advent-of-code-18/testutils"
 	"regexp"
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/thepatrik/advent-of-code-18/testutils"
 )
 
 func TestCalculateSamples(t *testing.T) {

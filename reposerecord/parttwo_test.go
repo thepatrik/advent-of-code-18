@@ -1,7 +1,7 @@
 package reposerecord
 
 import (
-	"advent-of-code-18/testutils"
+	"github.com/thepatrik/advent-of-code-18/testutils"
 	"testing"
 )
 
